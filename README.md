@@ -4,11 +4,16 @@ https://app.milanote.com/1VlHUf1AVrjP6W?p=GDAzJHBZq1Q
 
 # Process
 I began with a proof of concept in Colab.
+
+<img width="489" height="454" alt="Screenshot 2025-12-03 at 7 55 43 AM" src="https://github.com/user-attachments/assets/c75f7f96-9832-4351-b9be-3f36c87a22a9" />
 https://colab.research.google.com/drive/1MWxMykG0b-8Sn6kFAp19QJI1SsEvhFMY?usp=sharing
+
 Then I moved onto a local version that runs tkinter.
 
 # Method
-To make the avatar, I used matplotlib to generate custom shapes. I wrote a bezier curve function that kept all shapes organic. Then, I wrote functions for the head, body and legs. The head was made with an organic blob. The body or spine was made with a S shaped curve. The legs were long and flowing lines that tapered at the end.
+To make the avatar, I used matplotlib to generate custom shapes. I wrote a bezier curve functi
+
+on that kept all shapes organic. Then, I wrote functions for the head, body and legs. The head was made with an organic blob. The body or spine was made with a S shaped curve. The legs were long and flowing lines that tapered at the end.
 Then, I wrote a function to define scoring logic. Each trait was assigned a value, that could be plugged into the functions of the avatar shape generator. In Colab, I used ipywidgets to run a basic prototype. Then, I transferred it to my local Python and used Tkinter to write the full quiz code.
 
 
