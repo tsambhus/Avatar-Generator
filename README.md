@@ -18,7 +18,7 @@ Then, I wrote a function to define scoring logic. Each trait was assigned a valu
 
 
 # Contributions
-I used customtkinter, a library designed by Tom Schimansk. I used the matplotlib user guide to understand how to plot beziel curves and generate organic shapes. (https://matplotlib.org/stable/gallery/shapes_and_collections/quad_bezier.html) I used chatGPT for help coding the Colab widgets library. 
+I used customtkinter, a library designed by Tom Schimansk. I used the matplotlib user guide to understand how to plot beziel curves (https://matplotlib.org/stable/gallery/shapes_and_collections/quad_bezier.html), spines (https://matplotlib.org/stable/gallery/spines/index.html) I used chatGPT for help coding the Colab widgets library. 
 
 # Author
 My name is Tosha Sambhus and you can contact me at toshasambhus@gmail.com
