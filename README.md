@@ -4,8 +4,8 @@ https://app.milanote.com/1VlHUf1AVrjP6W?p=GDAzJHBZq1Q
 
 # Process
 I began with a proof of concept in Colab.
-
 <img width="489" height="454" alt="Screenshot 2025-12-03 at 7 55 43 AM" src="https://github.com/user-attachments/assets/c75f7f96-9832-4351-b9be-3f36c87a22a9" />
+
 https://colab.research.google.com/drive/1MWxMykG0b-8Sn6kFAp19QJI1SsEvhFMY?usp=sharing
 
 Then I moved onto a local version that runs tkinter.
