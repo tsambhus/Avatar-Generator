@@ -1,5 +1,6 @@
 # Avatar-Generator
 is an interactive personality test that generates a unique avatar based on your answers. No two avatars look the same. Your avatar will be added to a gallery that can be accessed [here]([https://app.milanote.com/1VlHUf1AVrjP6W?p=GDAzJHBZq1Q]).
+https://app.milanote.com/1VlHUf1AVrjP6W?p=GDAzJHBZq1Q
 
 # Process
 I began with a proof of concept in Colab.
