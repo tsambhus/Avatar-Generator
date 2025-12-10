@@ -27,7 +27,8 @@ I also designed an ideal working prototype in figma. This demonstrates what the 
 [Prototype](https://www.figma.com/proto/ZE003m9Kh7Loik8TVISks7/Spiro-App?page-id=0%3A1&node-id=33-1760&p=f&viewport=100%2C-585%2C0.17&t=bzMYsy0pcW269KbN-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=33%3A1760)
 
 # Contributions
-I used customtkinter, a library designed by Tom Schimansk. I used the matplotlib user guide to understand how to plot beziel curves (https://matplotlib.org/stable/gallery/shapes_and_collections/quad_bezier.html), spines (https://matplotlib.org/stable/gallery/spines/index.html) I used chatGPT for help coding the Colab widgets library. 
+I used customtkinter, a library designed by Tom Schimansk. I used the matplotlib user guide to understand how to plot beziel curves. 
+(https://matplotlib.org/stable/gallery/shapes_and_collections/quad_bezier.html), spines (https://matplotlib.org/stable/gallery/spines/index.html) I used a design from rudixtechnology on Instagram for one of my shapes. (https://www.instagram.com/reels/DRn_ul4kcVB/) I used chatGPT for help coding the Colab widgets library, and with Tkinter's UI generation.
 
 # Author
 My name is Tosha Sambhus and you can contact me at toshasambhus@gmail.com
