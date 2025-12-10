@@ -6,9 +6,11 @@ Open Source
 
 # Process
 I began with sketches for how I wanted my final avatars to look.
+
 <img width="476" height="756" alt="Screenshot 2025-12-10 at 10 04 44 AM" src="https://github.com/user-attachments/assets/158f1b2e-a3e7-4006-b6c9-064e4e9e5f63" />
 
 Then I built a proof of concept in Colab.
+
 <img width="489" height="454" alt="Screenshot 2025-12-03 at 7 55 43 AM" src="https://github.com/user-attachments/assets/c75f7f96-9832-4351-b9be-3f36c87a22a9" />
 
 
