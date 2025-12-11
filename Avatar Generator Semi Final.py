@@ -8,45 +8,45 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.path as mpath
 import matplotlib.patches as mpatches
 import random
+from scipy.interpolate import splprep, splev
+import matplotlib.pyplot as plt
 
-# -----------------------------
-# QUESTION + SCORING SETUP
-# -----------------------------
+
+
+# question + scoring setup
+
 
 QUESTIONS = [
-    ("How do you recharge?", ["Introvert", "Both", "Extrovert"]),
-    ("Which do you value more?", ["Logic", "Balance", "Intuition"]),
-    ("How playful are you?", ["Very serious", "Neutral", "Very playful"]),
-    ("How fast do you make decisions?", ["Slow", "Medium", "Fast"]),
-    ("How emotional is your thinking?", ["Low", "Medium", "High"]),
-    ("How open to new experiences are you?", ["Closed", "Neutral", "Open"]),
-    ("How routine-driven are you?", ["Rigid", "Comfy", "Flexible"]),
-    ("How abstract is your imagination?", ["Concrete", "Mixed", "Abstract"]),
-    ("Your general mood tone?", ["Calm", "Neutral", "Intense"]),
-    ("How chaotic/creative are you?", ["Minimalist", "Balanced", "Chaotic"]),
+    ("What is your favorite season?", ["Winter", "Spring", "Summer", "Autumn"]),
+    ("It's a Friday night. Would you rather...", ["Go to a party where you only know the host", "Hang out with your friends at their place", "Watch your favorite show at home"]),
+    ("Which color do you prefer?", ["Black", "Sage green", "Bright Red"]),
+    ("How fast do you make decisions?", ["On the spot", "A day or two", "One month minimum"]),
+    ("How often do you cry?", ["Once a month or less", "Once a week", "Once a day"]),
+    ("You've just been offered a chance to travel the world for 2 years. Would you do it?", ["No, I have a home where I am.", "Maximum, 2 weeks", "Yes, without a doubt."]),
+    ("How routine-driven are you?", ["Minute by minute plan", "Loose plans, but I can deviate", "No routine at all"]),
+    ("Which obscure skill would you master?", ["Perfect calligraphy", "Playing a rare instrument of your choice", "Understanding 3 random languages"]),
+    ("How do you react to the unknown?", ["Excitement", "Suspicion", "Anxiety", "Indifference"]),
+    ("How do you process your emotions?", ["Introspection", "Talking", "Creating"]),
 ]
 
-# Map each answer text → numeric trait (0.0, 0.5, 1.0)
+# map each multiple choice text to a numeric trait (0.0, 0.5, 1.0)
 ANSWER_SCORES = {
-    0: {"Introvert": 0.0, "Both": 0.5, "Extrovert": 1.0},
-    1: {"Logic": 0.0, "Balance": 0.5, "Intuition": 1.0},
-    2: {"Very serious": 0.0, "Neutral": 0.5, "Very playful": 1.0},
-    3: {"Slow": 0.0, "Medium": 0.5, "Fast": 1.0},
-    4: {"Low": 0.0, "Medium": 0.5, "High": 1.0},
-    5: {"Closed": 0.0, "Neutral": 0.5, "Open": 1.0},
-    6: {"Rigid": 0.0, "Comfy": 0.5, "Flexible": 1.0},
-    7: {"Concrete": 0.0, "Mixed": 0.5, "Abstract": 1.0},
-    8: {"Calm": 0.0, "Neutral": 0.5, "Intense": 1.0},
-    9: {"Minimalist": 0.0, "Balanced": 0.5, "Chaotic": 1.0},
+    0: {"Winter": 0.6 , "Spring": 0.85, "Autumn": 0.7, "Summer": 1.0},
+    1: {"Go to a party where you just know the host": 0.0, "Hang out with your friends at their place": 0.5, "Watch your favorite show at home": 1.0},
+    2: {"Black": 0.0, "Sage green": 0.5, "Bright Red": 1.0},
+    3: {"On the spot": 0.0, "A day or two": 0.5, "One month minimum": 1.0},
+    4: {"Once a month or less": 0.0, "Once a week": 0.5, "Once a day": 1.0},
+    5: {"No, I have a home where I am.": 0.0, "Maximum, 2 weeks": 0.5, "Yes, without a doubt.": 1.0},
+    6: {"Minute by minute plan": 0.0, "Loose plans, but I can deviate": 0.5, "No routine at all": 1.0},
+    7: {"Perfect calligraphy": 0.0, "Playing a rare instrument of your choice": 0.5, "Understanding 3 random languages": 1.0},
+    8: {"Indifference": 0.0, "Excitement": 0.25, "Suspicion": 0.75, "Anxiety": 1.0},
+    9: {"Introspection": 0.0, "Talking": 0.5, "Creating": 1.0},
 }
 
 
-# -----------------------------
-# AVATAR DRAWING HELPERS
-# -----------------------------
+# avatar drawing functions
 
-def bezier_curve(ax, pts, lw=3):
-    """Draw a smooth bezier curve using control points."""
+def bezier_curve(ax, pts, lw=3): #frommatplotlib bezier curves demo
     Path = mpath.Path
     path_data = [(Path.MOVETO, pts[0])]
     for i in range(1, len(pts), 3):
@@ -62,45 +62,67 @@ def bezier_curve(ax, pts, lw=3):
     ax.add_patch(patch)
 
 
-def organic_blob(ax, center, size, irregularity=0.2, fill=True):
-    """Draw a filled or outline organic blob for the head."""
-    x0, y0 = center
-    t = np.linspace(0, 2*np.pi, 200)
-    r = size * (1 + irregularity * np.sin(5*t + random.random()*3))
+def draw_head(ax, x, y, size, energy, abstractness): #"electric flower using Python" from rudix technology on instagram
+    
+    #head shape controlled by energy.
 
-    xs = x0 + r * np.cos(t)
-    ys = y0 + r * np.sin(t)
+    #energy: 0–20, controls how many lobes / oscillations the outline has.
 
-    if fill:
-        ax.fill(xs, ys, "black")
+    θ = np.linspace(0, 2 * np.pi, 300)  # angles
+    # scale by `size` 
+    r = size * (1 + 0.3 * np.cos(energy * θ)) #radial
+
+    xs = x + r * np.cos(θ)
+    ys = y + r * np.sin(θ)
+
+    ax.plot(xs, ys, color='black', linewidth=2)
+
+    #fill
+    if abstractness < 0.5:
+        ax.fill(xs, ys, color='black')
     else:
-        ax.plot(xs, ys, color="black", lw=2)
+        ax.plot(xs, ys, color='black', linewidth=2)
 
 
 def draw_body(ax, x, y, height, width, openness):
-    """Organic S-curve spine + curved outline body."""
-    spine_x = x
-    top = y + height / 2
-    bottom = y - height / 2
 
-    # Central S-curve spine
-    bezier_curve(ax, [
+    if openness < 0.33:
+        # super-open shape: long vertical line + arc
+        ax.plot([x, x], [y-height/2, y+height/2], color='black', linewidth=3)
+        theta = np.linspace(-np.pi/2, np.pi/2, 50)
+        ax.plot(x + width*np.cos(theta), y+height/2 + width*np.sin(theta), color='black', linewidth=3)
+
+    elif openness < 0.66:
+        # abstract trapezoid body
+        shape = np.array([
+            [x-width, y-height/2],
+            [x+width, y-height/2],
+            [x+0.5*width, y+height/2],
+            [x-0.5*width, y+height/2]
+        ])
+        ax.plot(shape[:,0], shape[:,1], color='black', linewidth=3)
+    else:
+        # central S-curve spine, frommatplotlib spine curves demo
+        spine_x = x
+        top = y + height / 2
+        bottom = y - height / 2
+        bezier_curve(ax, [
         (spine_x, bottom),
         (spine_x - width * 0.3, y - height * 0.2),
         (spine_x + width * (openness - 0.5), y + height * 0.2),
         (spine_x, top),
     ], lw=4)
 
-    # Left body outline
-    bezier_curve(ax, [
+    # left body outline
+        bezier_curve(ax, [
         (x - width, bottom),
         (x - width * 1.4, y - height * 0.2),
         (x - width * 1.2, y + height * 0.1),
         (x - width, top),
     ], lw=3)
 
-    # Right body outline
-    bezier_curve(ax, [
+    # right body outline
+        bezier_curve(ax, [
         (x + width, bottom),
         (x + width * 1.4, y - height * 0.1),
         (x + width * 1.2, y + height * 0.2),
@@ -108,8 +130,31 @@ def draw_body(ax, x, y, height, width, openness):
     ], lw=3)
 
 
-def draw_legs(ax, x, y, length, curvature):
-    """Long flowing bent legs that taper at the ends."""
+
+def draw_legs(ax, x, y, length, curvature, regulation):
+    #flat legs
+    if regulation == 1:
+        # lengths
+        left_len  = length
+        right_len = length * 1   # slightly longer than before
+
+        # left leg
+        ax.plot(
+            [x - left_len * 0.7, x - left_len * 0.2],
+            [y, y],
+            color='black',
+            linewidth=2
+        )
+
+        # right leg
+        ax.plot(
+            [x + right_len * 0.1, x + right_len * 0.85],
+            [y, y],
+            color='black',
+            linewidth=2
+        )
+        return
+    #flowing legs that taper at the ends
     spread = length * 0.3
 
     for side in [-1, 1]:
@@ -123,35 +168,20 @@ def draw_legs(ax, x, y, length, curvature):
             ctrl2,
             foot
         ], lw=4)
+    
 
-
-def draw_head(ax, x, y, size, abstractness):
-    """Filled head blobs."""
-    if abstractness < 0.33:
-        # simple filled circle
-        circ = mpatches.Circle((x, y), size, color='black')
-        ax.add_patch(circ)
-    elif abstractness < 0.66:
-        # stretched oval
-        circ = mpatches.Ellipse((x, y), 2*size*1.3, 2*size, color='black')
-        ax.add_patch(circ)
-    else:
-        # organic blob
-        organic_blob(ax, (x, y), size, irregularity=0.4, fill=True)
-
-
-def draw_noise(ax, intensity):
-    """Adds background texture based on creativity/chaos."""
-    n = int(intensity * 40)
+def draw_noise(ax, intro_extro):
+    #add noise
+    n = int(intro_extro * 40)
     for _ in range(n):
         x = random.uniform(-1, 1)
         y = random.uniform(-1.5, 1.5)
         ax.plot(x, y, 'o', color='black', markersize=random.random() * 2)
 
 
-# -----------------------------
-# MAIN APP CLASS
-# -----------------------------
+
+# UI for quiz (multiple choice questions, sliders and buttons), used chatGPT for the frame 
+
 
 class AvatarApp(ctk.CTk):
 
@@ -181,7 +211,7 @@ class AvatarApp(ctk.CTk):
 
         self.show_start_screen()
 
-    # ------- SCREEN MANAGEMENT -------
+    # screen management, used chatGPT to help
 
     def clear_main_frame(self):
         if self.main_frame is not None:
@@ -215,12 +245,11 @@ class AvatarApp(ctk.CTk):
         btn.pack(pady=30)
 
     def show_question_page(self, page_index):
-        """
-        page_index: 1–5, each page shows 2 questions:
-        page 1 → Q0, Q1
-        page 2 → Q2, Q3
-        ...
-        """
+
+        #page_index: 1–5, each page shows 2 questions:
+        #page 1 to Q0, Q1
+        #page 2 to Q2, Q3
+        
         self.clear_main_frame()
 
         start_q = (page_index - 1) * 2
@@ -286,8 +315,10 @@ class AvatarApp(ctk.CTk):
         slider_frame = ctk.CTkFrame(self.main_frame)
         slider_frame.pack(pady=10, fill="x", expand=False)
 
-        # Energy slider 0–255
-        self.slider_energy = ctk.CTkSlider(slider_frame, from_=0, to=255, number_of_steps=255)
+        # energy sliders 0-20
+        self.slider_energy = ctk.CTkSlider(slider_frame, from_=0, to=20, number_of_steps=40)
+
+        # other sliders 0-255
         self.slider_warmth = ctk.CTkSlider(slider_frame, from_=0, to=255, number_of_steps=255)
         self.slider_focus = ctk.CTkSlider(slider_frame, from_=0, to=255, number_of_steps=255)
 
@@ -302,9 +333,9 @@ class AvatarApp(ctk.CTk):
             lbl.pack(side="left", padx=10)
             slider_widget.pack(side="left", fill="x", expand=True, padx=10)
 
-        add_slider_row(slider_frame, "Energy (0–255)", self.slider_energy)
-        add_slider_row(slider_frame, "Warmth (0–255)", self.slider_warmth)
-        add_slider_row(slider_frame, "Focus (0–255)", self.slider_focus)
+        add_slider_row(slider_frame, "Countryside or big city?", self.slider_energy)
+        add_slider_row(slider_frame, "Your confidence today?", self.slider_warmth)
+        add_slider_row(slider_frame, "Average focus levels?", self.slider_focus)
 
         btn = ctk.CTkButton(
             self.main_frame,
@@ -313,17 +344,17 @@ class AvatarApp(ctk.CTk):
         )
         btn.pack(pady=15)
 
-        # Frame where the matplotlib canvas (avatar) will live
+        # frame where the matplotlib canvas (avatar) will live
         self.avatar_frame = ctk.CTkFrame(self.main_frame)
         self.avatar_frame.pack(fill="both", expand=True, pady=10)
 
     def next_page(self):
-        """
-        Global navigation:
-        0 → start
-        1–5 → question pages
-        6 → sliders
-        """
+
+        #Global navigation:
+        #0 to start
+        #1–5 to question pages
+        #6 to sliders
+
         if self.current_page == 0:
             self.current_page = 1
             self.show_question_page(1)
@@ -334,76 +365,80 @@ class AvatarApp(ctk.CTk):
             self.current_page = 6
             self.show_slider_page()
 
-    # ------- TRAITS + AVATAR -------
+    #translating answers to generate avatar 
 
     def compute_traits(self):
-        # Convert question answers → numeric traits
+        #function to get the question answers in, used chatgpt
         trait_values = []
         for i, var in enumerate(self.question_vars):
             text = var.get()
             score = ANSWER_SCORES[i].get(text, 0.5)
             trait_values.append(score)
 
-        # sliders: map 0–255 → 0–1
-        energy = self.slider_energy.get() / 255.0
+        # sliders: map 0–255 to 0–1
+        
         warmth = self.slider_warmth.get() / 255.0
         focus = self.slider_focus.get() / 255.0
 
+        #keep energy from 0-20
+        energy = self.slider_energy.get()
+        #combine into one list
         return np.array(trait_values + [energy, warmth, focus])
 
     def generate_and_show_avatar(self):
         traits = self.compute_traits()
 
-        intro_extro = traits[0]
-        intuition = traits[1]
-        playfulness = traits[2]
-        speed = traits[3]
-        emotionality = traits[4]
+        seasons = traits[0]
+        intro_extro = traits[1]
+        color = traits[2]
+        spontaneity = traits[3]
+        cryfrequency = traits[4]
         openness = traits[5]
         flexibility = traits[6]
         abstractness = traits[7]
-        mood = traits[8]
-        chaos = traits[9]
+        regulation = traits[8]
+        consientiousness = traits[9]
 
         energy = traits[10]
         warmth = traits[11]
         focus = traits[12]
 
-        # Map traits → visual parameters
-        body_height = 0.6 + openness * 1.2
-        body_width = 0.15 + emotionality * 0.2 * (1 + warmth * 0.5)
-        head_size = 0.09 + playfulness * 0.07
-        leg_length = 0.6 + energy * 0.7
-        curve = (flexibility - 0.5) * (1 + focus * 0.5)
-        noise_amount = chaos
+        # map traits to visual parameters
+        body_height = seasons + intro_extro * 1.5
+        body_width = 0.15 + cryfrequency * 0.2 * (1 + warmth * 0.5)
+        head_size = 0.09 + color * 0.08
+        leg_length = 0.6 + focus * 0.7
+        curve = (consientiousness - 0.5) * (regulation * 3)
+        noise_amount = flexibility
 
-        # Clear previous avatar canvas if exists
+        # Clear previous avatar canvas if exists, used chatGPT here to debug
         if self.avatar_canvas is not None:
             self.avatar_canvas.get_tk_widget().destroy()
             self.avatar_canvas = None
 
-        # Create matplotlib figure
+        # create matplotlib figure
         fig = Figure(figsize=(4, 6), dpi=100)
         ax = fig.add_subplot(111)
         ax.set_xlim(-1, 1)
         ax.set_ylim(-1.5, 1.5)
         ax.axis("off")
 
-        # Draw avatar
-        draw_noise(ax, noise_amount)
+        # draw avatar
+        
         draw_body(ax, 0, 0.2, body_height, body_width, openness)
-        draw_head(ax, 0, body_height / 2 + 0.35, head_size, abstractness)
-        draw_legs(ax, 0, -body_height / 2, leg_length, curve)
+        draw_head(ax, 0, body_height / 2 + 0.35, head_size, energy, abstractness)
+        draw_legs(ax, 0, -body_height / 2, leg_length, curve, regulation)
 
-        # Embed figure in Tkinter
+        # embed figure in Tkinter
         self.avatar_canvas = FigureCanvasTkAgg(fig, master=self.avatar_frame)
         self.avatar_canvas.draw()
-        self.avatar_canvas.get_tk_widget().pack(fill="both", expand=True, padx=10, pady=10)
+        self.avatar_canvas.get_tk_widget().pack()
 
 
-# -----------------------------
-# RUN APP
-# -----------------------------
+
+
+# run APP
+
 
 if __name__ == "__main__":
     app = AvatarApp()
