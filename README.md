@@ -41,7 +41,7 @@ Then, I wrote a function to define scoring logic. Each trait was assigned a valu
 Legs are drawn based on emotional regulation/ response
 **If legs are flat**, regulation = anxiety
 
-Otherwise.. **leg length** is determined by focus levels, higher focus = longer legs
+**Leg length** is determined by focus levels, higher focus = longer legs
 
 **Curve** is determined by regulation and conscientiousness i.e. processing emotions, the more you gain comfort from socializing and creating, and the more excited you are about the unknown, the more curvy and playful your legs appear
 
