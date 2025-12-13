@@ -22,7 +22,7 @@ Then I moved onto a local version that runs tkinter.
 To make the avatar, I used matplotlib to generate custom shapes. I wrote a bezier curve function that kept all shapes organic. Then, I wrote functions for the head, body and legs. The head was made with an oscillating cos shape. The body or spine were made with S shaped curves, and . The legs were long and flowing lines that tapered at the end.
 Then, I wrote a function to define scoring logic. Each trait was assigned a value, that could be plugged into the functions of the avatar shape generator. In Colab, I used ipywidgets to run a basic prototype. Then, I transferred it to my local Python and used Tkinter to write the full quiz code.
 
-# How it works
+# Anatomy
 ## Head
 **Shape** is determined by big city/countryside slider, how much energy do you have/how much do you crave peace? the more energy you have the more oscillations there are.
 
