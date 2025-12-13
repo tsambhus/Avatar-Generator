@@ -1,5 +1,5 @@
 # Avatar-Generator
-is an interactive personality test that generates a unique avatar based on your answers. No two avatars look the same. Previous avatars have been added to a gallery that can be accessed [here](https://app.milanote.com/1VqOfZ1WwknkwQ?p=0uQVSkhlN3u).
+is an interactive personality test that generates a unique avatar based on your answers. No two avatars look the same. Previous avatars have been added to a gallery that can be accessed [here](https://app.milanote.com/1VqOfZ1WwknkwQ?p=0uQVSkhlN3u). To play the game, download the source code and run the module on Python. 
 
 ## Licensing
 Open Source
